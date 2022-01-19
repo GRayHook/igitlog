@@ -16,7 +16,7 @@ class Commit(object):
         self.hash = match.group("hash")
         self.title = match.group("title")
 
-process = subprocess.Popen(["git", "log", "--oneline"], stdout=subprocess.PIPE, stderr=open('/dev/null', 'w'))
+process = subprocess.Popen(["git", "--no-pager", "log", "--decorate=short", "--oneline"], stdout=subprocess.PIPE, stderr=open('/dev/null', 'w'))
 commits = []
 for part in process.communicate():
     if part == None:
@@ -46,7 +46,9 @@ max_y, max_x = maxcoords[0], maxcoords[1]
 
 
 def show_commit(commit):
-    os.system(f"git show {commit.hash}")
+    stdscr.erase()
+    stdscr.refresh()
+    os.system(f"LESS='RSX' git show {commit.hash}")
 
 
 pad = curses.newpad(len(commits), max_x)
@@ -54,12 +56,13 @@ pad = curses.newpad(len(commits), max_x)
 
 def print_commit(commit, pos_y, selected):
     pad.addstr(pos_y, 0, " " * (max_x - 1))
+    cut_to = max_x - 3 - len(commit.hash)
     if selected:
         pad.addstr(pos_y, 0, f"{commit.hash}", curses.color_pair(1))
-        pad.addstr(pos_y, len(commit.hash) + 2, f"{commit.title}", curses.color_pair(1))
+        pad.addstr(pos_y, len(commit.hash) + 2, f"{commit.title[:cut_to]}", curses.color_pair(1))
     else:
         pad.addstr(pos_y, 0, f"{commit.hash}", curses.color_pair(2))
-        pad.addstr(pos_y, len(commit.hash) + 2, f"{commit.title}")
+        pad.addstr(pos_y, len(commit.hash) + 2, f"{commit.title[:cut_to]}")
 
 print_commit(commits[0], 0, True)
 
