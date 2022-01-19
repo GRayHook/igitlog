@@ -16,7 +16,7 @@ class Commit(object):
         self.hash = match.group("hash")
         self.title = match.group("title")
 
-process = subprocess.Popen(["git", "--no-pager", "log", "--decorate=short", "--oneline"], stdout=subprocess.PIPE, stderr=open('/dev/null', 'w'))
+process = subprocess.Popen(["git", "--no-pager", "log", "--decorate=short", "--oneline"] + sys.argv[1:], stdout=subprocess.PIPE, stderr=open('/dev/null', 'w'))
 commits = []
 for part in process.communicate():
     if part == None:
