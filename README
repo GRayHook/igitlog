@@ -1,0 +1,1 @@
+This is very simply interactive navigator through `git log`. It works as alias of `git log --oneline $@`. Choosen commit can be showed in `less` for detail inspecting. Use 'jk' to navigate between, 'l' to open `git show`, and `q` to quit.
