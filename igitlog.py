@@ -28,6 +28,7 @@ for part in process.communicate():
 
 
 if len(commits) == 0:
+    print("No repo?")
     sys.exit(0)
 
 stdscr = curses.initscr()
@@ -81,7 +82,7 @@ while running:
 
     mvmt = stdscr.getch()
     if mvmt == ord('j'):
-        if pos < len(commits):
+        if pos < len(commits) - 1:
             pos += 1
         if pos - offset > max_y - 2 and offset < len(commits) - max_y + 5:
             offset += 1
